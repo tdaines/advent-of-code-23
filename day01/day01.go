@@ -15,8 +15,6 @@ func Part1() {
 	}
 	defer input.Close()
 
-	fmt.Print("Day01 - 1: Scanning file...")
-
 	scanner := bufio.NewScanner(input)
 	var sum int = 0
 	for scanner.Scan() {
@@ -24,9 +22,7 @@ func Part1() {
 		value := GetCalibrationValue(line)
 		sum += value
 	}
-
-	fmt.Println("Done")
-	fmt.Printf("Day01 - 1: Total sum: %d\n", sum)
+	fmt.Printf("Day01 - 1: Total: %d\n", sum)
 }
 
 func Part2() {
@@ -37,8 +33,6 @@ func Part2() {
 	}
 	defer input.Close()
 
-	fmt.Print("Day01 - 2: Scanning file...")
-
 	scanner := bufio.NewScanner(input)
 	var sum int = 0
 	for scanner.Scan() {
@@ -47,8 +41,7 @@ func Part2() {
 		sum += value
 	}
 
-	fmt.Println("Done")
-	fmt.Printf("Day01 - 2: Total sum: %d\n", sum)
+	fmt.Printf("Day01 - 2: Total: %d\n", sum)
 }
 
 func GetCalibrationValue(line string) int {
