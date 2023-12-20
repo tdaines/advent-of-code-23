@@ -28,11 +28,6 @@ func Part1() {
 		for col := 0; col < len(schematic[row]); col++ {
 			number, isPartNumber, endCol := ParseNumber(schematic, row, col)
 
-			if number > 0 {
-				// fmt.Printf("%d - [%d][%d]\n", number, row, col)
-				//fmt.Println(number)
-			}
-
 			if isPartNumber {
 				sum += number
 			}
