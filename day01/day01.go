@@ -62,9 +62,8 @@ func GetFirstDigit(line string) int {
 }
 
 func GetLastDigit(line string) int {
-	runeString := []rune(line)
-	for x := len(runeString) - 1; x >= 0; x-- {
-		asciiValue := int(runeString[x])
+	for x := len(line) - 1; x >= 0; x-- {
+		asciiValue := int(line[x])
 		if asciiValue >= 48 && asciiValue <= 57 {
 			return asciiValue - 48
 		}
