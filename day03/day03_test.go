@@ -75,3 +75,67 @@ func TestParseNumber(t *testing.T) {
 	assert.False(t, isPartNumber)
 	assert.Equal(t, 3, endCol)
 }
+
+func TestParsePartNumber(t *testing.T) {
+	schematic := []string{
+		"467..114..",
+		"...*......",
+		"..35..633.",
+		"......#...",
+		"617*......",
+		".....+.58.",
+		"..592.....",
+		"......755.",
+		"...$.*....",
+		".664.598..",
+	}
+
+	partNumber := day03.ParsePartNumber(schematic, 0, 0)
+	assert.Equal(t, 0, partNumber.Row)
+	assert.Equal(t, 0, partNumber.Col)
+	assert.Equal(t, 467, partNumber.Number)
+
+	partNumber = day03.ParsePartNumber(schematic, 0, 1)
+	assert.Equal(t, 0, partNumber.Row)
+	assert.Equal(t, 0, partNumber.Col)
+	assert.Equal(t, 467, partNumber.Number)
+
+	partNumber = day03.ParsePartNumber(schematic, 0, 2)
+	assert.Equal(t, 0, partNumber.Row)
+	assert.Equal(t, 0, partNumber.Col)
+	assert.Equal(t, 467, partNumber.Number)
+
+	partNumber = day03.ParsePartNumber(schematic, 1, 0)
+	assert.Equal(t, 0, partNumber.Row)
+	assert.Equal(t, 0, partNumber.Col)
+	assert.Equal(t, 0, partNumber.Number)
+
+	partNumber = day03.ParsePartNumber(schematic, 1, 9)
+	assert.Equal(t, 0, partNumber.Row)
+	assert.Equal(t, 0, partNumber.Col)
+	assert.Equal(t, 0, partNumber.Number)
+}
+
+func TestParseGearRatio(t *testing.T) {
+	schematic := []string{
+		"467..114..",
+		"...*......",
+		"..35..633.",
+		"......#...",
+		"617*......",
+		".....+.58.",
+		"..592.....",
+		"......755.",
+		"...$.*....",
+		".664.598..",
+	}
+
+	gearRatio := day03.ParseGearRatio(schematic, 1, 3)
+	assert.Equal(t, 16345, gearRatio)
+
+	gearRatio = day03.ParseGearRatio(schematic, 4, 3)
+	assert.Equal(t, 0, gearRatio)
+
+	gearRatio = day03.ParseGearRatio(schematic, 8, 5)
+	assert.Equal(t, 451490, gearRatio)
+}
