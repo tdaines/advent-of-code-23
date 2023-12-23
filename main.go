@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/cheynewallace/tabby"
 	"github.com/tdaines/advent-of-code-23/day01"
 	"github.com/tdaines/advent-of-code-23/day02"
 	"github.com/tdaines/advent-of-code-23/day03"
@@ -8,12 +9,32 @@ import (
 )
 
 func main() {
-	day01.Part1()
-	day01.Part2()
-	day02.Part1()
-	day02.Part2()
-	day03.Part1()
-	day03.Part2()
-	day04.Part1()
-	day04.Part2()
+	t := tabby.New()
+	t.AddHeader("DAY", "PART", "ANSWER", "ELAPSED")
+
+	var answer, elapsed = day01.Part1()
+	t.AddLine("1", "1", answer, elapsed)
+
+	answer, elapsed = day01.Part2()
+	t.AddLine("1", "2", answer, elapsed)
+
+	answer, elapsed = day02.Part1()
+	t.AddLine("2", "1", answer, elapsed)
+
+	answer, elapsed = day02.Part2()
+	t.AddLine("2", "2", answer, elapsed)
+
+	answer, elapsed = day03.Part1()
+	t.AddLine("3", "1", answer, elapsed)
+
+	answer, elapsed = day03.Part2()
+	t.AddLine("3", "2", answer, elapsed)
+
+	answer, elapsed = day04.Part1()
+	t.AddLine("4", "1", answer, elapsed)
+
+	answer, elapsed = day04.Part2()
+	t.AddLine("4", "2", answer, elapsed)
+
+	t.Print()
 }

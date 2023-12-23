@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Game struct {
@@ -19,7 +20,8 @@ type CubeSet struct {
 	Blue  int
 }
 
-func Part1() {
+func Part1() (answer int, elapsed time.Duration) {
+	var now = time.Now()
 	input, err := os.Open("./day02/input.txt")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -37,10 +39,13 @@ func Part1() {
 			sum += game.Id
 		}
 	}
-	fmt.Printf("Day02 - 1: Total: %d\n", sum)
+
+	answer = sum
+	return answer, time.Since(now)
 }
 
-func Part2() {
+func Part2() (answer int, elapsed time.Duration) {
+	var now = time.Now()
 	input, err := os.Open("./day02/input.txt")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -59,7 +64,8 @@ func Part2() {
 		sum += power
 	}
 
-	fmt.Printf("Day02 - 2: Total: %d\n", sum)
+	answer = sum
+	return answer, time.Since(now)
 }
 
 func IsGamePossible(game Game, maxRed int, maxGreen int, maxBlue int) bool {

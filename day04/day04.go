@@ -6,11 +6,13 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	set "github.com/deckarep/golang-set/v2"
 )
 
-func Part1() {
+func Part1() (answer int, elapsed time.Duration) {
+	var now = time.Now()
 	input, err := os.Open("./day04/input.txt")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -27,10 +29,12 @@ func Part1() {
 		sum += cardValue
 	}
 
-	fmt.Printf("Day04 - 1: Total: %d\n", sum)
+	answer = sum
+	return answer, time.Since(now)
 }
 
-func Part2() {
+func Part2() (answer int, elapsed time.Duration) {
+	var now = time.Now()
 	input, err := os.Open("./day04/input.txt")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -47,7 +51,8 @@ func Part2() {
 	}
 
 	var sum = CountCards(lines)
-	fmt.Printf("Day04 - 2: Total: %d\n", sum)
+	answer = sum
+	return answer, time.Since(now)
 }
 
 func CountCards(lines []string) int {

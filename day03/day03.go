@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 )
 
 type PartNumber struct {
@@ -12,7 +13,8 @@ type PartNumber struct {
 	Number int
 }
 
-func Part1() {
+func Part1() (answer int, elapsed time.Duration) {
+	var now = time.Now()
 	input, err := os.Open("./day03/input.txt")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -42,10 +44,12 @@ func Part1() {
 		}
 	}
 
-	fmt.Printf("Day03 - 1: Total: %d\n", sum)
+	answer = sum
+	return answer, time.Since(now)
 }
 
-func Part2() {
+func Part2() (answer int, elapsed time.Duration) {
+	var now = time.Now()
 	input, err := os.Open("./day03/input.txt")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -72,7 +76,8 @@ func Part2() {
 		}
 	}
 
-	fmt.Printf("Day03 - 2: Total: %d\n", sum)
+	answer = sum
+	return answer, time.Since(now)
 }
 
 func ParseNumber(schematic []string, row int, col int) (number int, isPartNumber bool, endCol int) {
