@@ -40,8 +40,8 @@ func main() {
 	answer, elapsed = day05.Part1()
 	t.AddLine("5", "1", answer, elapsed)
 
-	answer, elapsed = day05.Part2()
-	t.AddLine("5", "2", answer, elapsed)
+	// answer, elapsed = day05.Part2()
+	// t.AddLine("5", "2", answer, elapsed)
 
 	t.Print()
 }
