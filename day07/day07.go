@@ -53,6 +53,10 @@ func Part2() (answer int, elapsed time.Duration) {
 		pokerHands = append(pokerHands, NewPokerHandWithWilds(cards, bid))
 	}
 
+	// for _, hand := range pokerHands {
+	// 	fmt.Printf("%s - %d\n", hand.Cards, hand.Type)
+	// }
+
 	SortPokerHandsWithWilds(pokerHands)
 	var totalWinnings = CalculateTotalWinnings(pokerHands)
 
@@ -135,10 +139,18 @@ func NewPokerHandWithWilds(cards string, bid int) PokerHand {
 		counter[card] = counter[card] + 1
 	}
 
-	var count = counter[rune('J')]
+	var num_wilds = counter[rune('J')]
+
+	// Downgrade hands when we only have a pair of Jacks
+	// or only 3 Jacks
+	if hand.Type == OnePair && num_wilds == 2 {
+		hand.Type = HighCard
+	} else if hand.Type == ThreeOfAKind && num_wilds == 3 {
+		hand.Type = HighCard
+	}
 
 	// upgrade hand for each Joker (wild)
-	for i := 0; i < count; i++ {
+	for i := 0; i < num_wilds; i++ {
 		switch hand.Type {
 		case HighCard:
 			hand.Type = OnePair

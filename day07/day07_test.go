@@ -94,6 +94,16 @@ func TestNewPokerHandWithWilds(t *testing.T) {
 	assert.Equal(t, "QQQJA", hand.Cards)
 	assert.Equal(t, day07.FourOfAKind, hand.Type)
 	assert.Equal(t, 483, hand.Bid)
+
+	hand = day07.NewPokerHandWithWilds("96JQJ", 0)
+	assert.Equal(t, "96JQJ", hand.Cards)
+	assert.Equal(t, day07.ThreeOfAKind, hand.Type)
+	assert.Equal(t, 0, hand.Bid)
+
+	hand = day07.NewPokerHandWithWilds("J3JQJ", 0)
+	assert.Equal(t, "J3JQJ", hand.Cards)
+	assert.Equal(t, day07.FourOfAKind, hand.Type)
+	assert.Equal(t, 0, hand.Bid)
 }
 
 func TestSortPokerHandsWithWilds(t *testing.T) {
