@@ -53,10 +53,6 @@ func Part2() (answer int, elapsed time.Duration) {
 		pokerHands = append(pokerHands, NewPokerHandWithWilds(cards, bid))
 	}
 
-	// for _, hand := range pokerHands {
-	// 	fmt.Printf("%s - %d\n", hand.Cards, hand.Type)
-	// }
-
 	SortPokerHandsWithWilds(pokerHands)
 	var totalWinnings = CalculateTotalWinnings(pokerHands)
 
