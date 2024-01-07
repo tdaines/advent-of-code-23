@@ -99,9 +99,6 @@ func GenerateNextDigit(history []int) (nextDigit int) {
 }
 
 func GeneratePreviousDigit(history []int) (previousDigit int) {
-	// var orig = make([]int, 0, len(history))
-	// copy(orig, history)
-
 	var startDigits = []int{}
 	startDigits = append(startDigits, history[0])
 
@@ -117,10 +114,6 @@ func GeneratePreviousDigit(history []int) (previousDigit int) {
 				allZeroes = false
 			}
 		}
-
-		// if len(sequence) == 0 {
-			// fmt.Println(orig)
-		// }
 
 		startDigits = append(startDigits, sequence[0])
 		history = sequence
