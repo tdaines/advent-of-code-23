@@ -74,11 +74,9 @@ const (
 )
 
 type Node struct {
-	Label          string
-	IsStartingNode bool
-	IsEndingNode   bool
-	Left           *Node
-	Right          *Node
+	Label string
+	Left  *Node
+	Right *Node
 }
 
 func NewNode(label string) *Node {

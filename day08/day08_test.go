@@ -7,20 +7,6 @@ import (
 	"github.com/tdaines/advent-of-code-23/day08"
 )
 
-func TestNewNode(t *testing.T) {
-	var node = day08.NewNode("AAA")
-	assert.True(t, node.IsStartingNode)
-	assert.False(t, node.IsEndingNode)
-
-	node = day08.NewNode("XYZ")
-	assert.False(t, node.IsStartingNode)
-	assert.True(t, node.IsEndingNode)
-
-	node = day08.NewNode("DEF")
-	assert.False(t, node.IsStartingNode)
-	assert.False(t, node.IsEndingNode)
-}
-
 func TestParseNodeDefinition(t *testing.T) {
 	var label, leftLabel, rightLabel = day08.ParseNodeDefinition("AAA = (BBB, CCC)")
 	assert.Equal(t, "AAA", label)
