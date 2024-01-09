@@ -1,29 +1,25 @@
 package day09
 
 import (
-	"bufio"
-	"fmt"
-	"os"
+	_ "embed"
 	"strconv"
 	"strings"
 	"time"
 )
 
+//go:embed input.txt
+var input string
+
+func init() {
+	input = strings.TrimRight(input, "\n")
+}
+
 func Part1() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day09/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
-
-	scanner := bufio.NewScanner(input)
 	var total = 0
+	var lines = strings.Split(input, "\n")
 
-	for scanner.Scan() {
-		line := scanner.Text()
-
+	for _, line := range lines {
 		var history = ParseHistory(line)
 		var nextDigit = GenerateNextDigit(history)
 
@@ -36,19 +32,10 @@ func Part1() (answer int, elapsed time.Duration) {
 
 func Part2() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day09/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
-
-	scanner := bufio.NewScanner(input)
 	var total = 0
+	var lines = strings.Split(input, "\n")
 
-	for scanner.Scan() {
-		line := scanner.Text()
-
+	for _, line := range lines {
 		var history = ParseHistory(line)
 		var previousDigit = GeneratePreviousDigit(history)
 

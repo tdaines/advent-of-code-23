@@ -1,29 +1,27 @@
 package day07
 
 import (
-	"bufio"
-	"fmt"
-	"os"
+	_ "embed"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
 
+//go:embed input.txt
+var input string
+
+func init() {
+	input = strings.TrimRight(input, "\n")
+}
+
 func Part1() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day07/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
 
-	scanner := bufio.NewScanner(input)
+	var lines = strings.Split(input, "\n")
 	var pokerHands = []PokerHand{}
 
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range lines {
 		var cards, bid = ParsePokerHandString(line)
 		pokerHands = append(pokerHands, NewPokerHand(cards, bid))
 	}
@@ -37,18 +35,11 @@ func Part1() (answer int, elapsed time.Duration) {
 
 func Part2() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day07/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
 
-	scanner := bufio.NewScanner(input)
+	var lines = strings.Split(input, "\n")
 	var pokerHands = []PokerHand{}
 
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range lines {
 		var cards, bid = ParsePokerHandString(line)
 		pokerHands = append(pokerHands, NewPokerHandWithWilds(cards, bid))
 	}

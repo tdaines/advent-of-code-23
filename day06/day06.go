@@ -1,30 +1,22 @@
 package day06
 
 import (
-	"bufio"
-	"fmt"
-	"os"
+	_ "embed"
 	"strconv"
 	"strings"
 	"time"
 )
 
+//go:embed input.txt
+var input string
+
+func init() {
+	input = strings.TrimRight(input, "\n")
+}
+
 func Part1() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day06/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
-
-	scanner := bufio.NewScanner(input)
-	lines := []string{}
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		lines = append(lines, line)
-	}
+	var lines = strings.Split(input, "\n")
 
 	var marginOfError = 1
 	var races = ParseRaces(lines[0], lines[1])
@@ -38,23 +30,9 @@ func Part1() (answer int, elapsed time.Duration) {
 
 func Part2() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day06/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
-
-	scanner := bufio.NewScanner(input)
-	lines := []string{}
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		lines = append(lines, line)
-	}
+	var lines = strings.Split(input, "\n")
 
 	var race = ParseRace(lines[0], lines[1])
-
 	answer = CountWaysToWin(race)
 	return answer, time.Since(now)
 }
@@ -86,19 +64,26 @@ func ParseRaces(timeLine string, distanceLine string) []Race {
 
 func CountWaysToWin(race Race) int {
 	var minDistance = race.Distance
-	var count = 0
+	var losing = true
+	var startTime = 0
 
-	for holdTime := 0; holdTime <= race.Time; holdTime++ {
-		var speed = holdTime
-		var remainingTime = race.Time - holdTime
-
+	// Check from the beginning
+	for losing {
+		var speed = startTime
+		var remainingTime = race.Time - startTime
 		var distance = speed * remainingTime
 		if distance > minDistance {
-			count++
+			losing = false
+		} else {
+			startTime++
 		}
 	}
 
-	return count
+	// End time is the same distance from the race.Time as
+	// start time is from zero
+	var endTime = race.Time - startTime
+
+	return endTime - startTime + 1
 }
 
 func ParseRace(timeLine string, distanceLine string) Race {

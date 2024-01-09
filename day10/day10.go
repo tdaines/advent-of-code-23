@@ -1,29 +1,22 @@
 package day10
 
 import (
-	"bufio"
-	"fmt"
-	"os"
+	_ "embed"
+	"strings"
 	"time"
 )
 
+//go:embed input.txt
+var input string
+
+func init() {
+	input = strings.TrimRight(input, "\n")
+}
+
 func Part1() (answer int, elapsed time.Duration) {
 	var now = time.Now()
-	input, err := os.Open("./day10/input.txt")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer input.Close()
 
-	var scanner = bufio.NewScanner(input)
-	var lines = []string{}
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		lines = append(lines, line)
-	}
-
+	var lines = strings.Split(input, "\n")
 	var steps = FindMaxStepsFromStart(lines)
 
 	answer = steps
