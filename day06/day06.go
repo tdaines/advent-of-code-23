@@ -64,18 +64,26 @@ func ParseRaces(timeLine string, distanceLine string) []Race {
 
 func CountWaysToWin(race Race) int {
 	var minDistance = race.Distance
-	var losing = true
 	var startTime = 0
 
-	// Check from the beginning
-	for losing {
-		var speed = startTime
-		var remainingTime = race.Time - startTime
-		var distance = speed * remainingTime
+	var start = 0
+	var end = race.Time
+
+	for {
+		var mid = start + (end-start)/2
+		var speed = mid
+		var distance = CalcDistance(speed, race.Time)
 		if distance > minDistance {
-			losing = false
+			// Found a win, but is it the first?
+			if CalcDistance(speed-1, race.Time) <= minDistance {
+				startTime = speed
+				break
+			} else {
+				// Not the first win
+				end = mid
+			}
 		} else {
-			startTime++
+			start = mid
 		}
 	}
 
@@ -84,6 +92,11 @@ func CountWaysToWin(race Race) int {
 	var endTime = race.Time - startTime
 
 	return endTime - startTime + 1
+}
+
+func CalcDistance(speed int, raceTime int) int {
+	var remainingTime = raceTime - speed
+	return speed * remainingTime
 }
 
 func ParseRace(timeLine string, distanceLine string) Race {
