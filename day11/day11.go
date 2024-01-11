@@ -18,12 +18,12 @@ func Part1() (answer int, elapsed time.Duration) {
 	var universe = bytes.Split(input, []byte{'\n'})
 
 	var emptyRows, emptyCols = ExpandUniverse(universe)
-	var galaxies = FindGalaxies(universe)
+	var galaxies = FindGalaxies(universe, emptyRows, emptyCols, 2)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 2)
+			steps += CountStepsBetween(galaxies[i], galaxies[j])
 		}
 	}
 
@@ -37,12 +37,12 @@ func Part2() (answer int, elapsed time.Duration) {
 	var universe = bytes.Split(input, []byte{'\n'})
 
 	var emptyRows, emptyCols = ExpandUniverse(universe)
-	var galaxies = FindGalaxies(universe)
+	var galaxies = FindGalaxies(universe, emptyRows, emptyCols, 1_000_000)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 1_000_000)
+			steps += CountStepsBetween(galaxies[i], galaxies[j])
 		}
 	}
 
@@ -53,9 +53,8 @@ func Part2() (answer int, elapsed time.Duration) {
 type Universe [][]byte
 
 const (
-	GALAXY  byte = '#'
-	SPACE   byte = '.'
-	PENALTY byte = '!'
+	GALAXY byte = '#'
+	SPACE  byte = '.'
 )
 
 type Galaxy struct {
@@ -63,16 +62,23 @@ type Galaxy struct {
 	Col int
 }
 
-func ExpandUniverse(universe Universe) (emptyRows []int, emptyCols []int) {
+type Nothing struct{}
+
+var Void = Nothing{}
+
+func ExpandUniverse(universe Universe) (emptyRows, emptyCols map[int]Nothing) {
+	emptyRows = map[int]Nothing{}
+	emptyCols = map[int]Nothing{}
+
 	for i, row := range universe {
 		if isEmptySpace(row) {
-			emptyRows = append(emptyRows, i)
+			emptyRows[i] = Void
 		}
 	}
 
 	for col := 0; col < len(universe[0]); col++ {
 		if isEmptySpaceCol(universe, col) {
-			emptyCols = append(emptyCols, col)
+			emptyCols[col] = Void
 		}
 	}
 
@@ -93,54 +99,44 @@ func isEmptySpaceCol(universe Universe, col int) bool {
 	return true
 }
 
-func FindGalaxies(universe Universe) (galaxies []Galaxy) {
+func FindGalaxies(universe Universe, emptyRows, emptyCols map[int]Nothing, penaltyMultiplier int) (galaxies []Galaxy) {
+
+	var rowActual = 0
 	for row := 0; row < len(universe); row++ {
+		if _, exists := emptyRows[row]; exists {
+			rowActual += (penaltyMultiplier - 1)
+		}
+
+		var colActual = 0
 		for col := 0; col < len(universe[row]); col++ {
-			if universe[row][col] == GALAXY {
-				galaxies = append(galaxies, Galaxy{Row: row, Col: col})
+			if _, exists := emptyCols[col]; exists {
+				colActual += (penaltyMultiplier - 1)
 			}
+
+			if universe[row][col] == GALAXY {
+				galaxies = append(galaxies, Galaxy{Row: rowActual, Col: colActual})
+			}
+
+			colActual++
 		}
+		rowActual++
 	}
 
 	return
 }
 
-func CountStepsBetween(universe Universe, first, second Galaxy, emptyRows, emptyCols []int, penaltyMultiplier int) (steps int) {
-	var rowStart = first.Row
-	var rowEnd = second.Row
-	if rowStart > rowEnd {
-		rowStart, rowEnd = rowEnd, rowStart
-	}
+func CountStepsBetween(first, second Galaxy) (steps int) {
 
-	var colStart = first.Col
-	var colEnd = second.Col
-	if colStart > colEnd {
-		colStart, colEnd = colEnd, colStart
-	}
+	var rowDiff = abs(first.Row - second.Row)
+	var colDiff = abs(first.Col - second.Col)
 
-	// Count number of emptry rows between startRow and endRow
-	var numEmptyRows = CountNumsWithinRange(emptyRows, rowStart, rowEnd)
-	var rowDistance = (rowEnd - rowStart) - numEmptyRows + (numEmptyRows * penaltyMultiplier)
-
-	// Count number of emptry cols between startCol and endCol
-	var numEmptyCols = CountNumsWithinRange(emptyCols, colStart, colEnd)
-	var colDistance = (colEnd - colStart) - numEmptyCols + (numEmptyCols * penaltyMultiplier)
-
-	steps = rowDistance + colDistance
-
-	return steps
+	return rowDiff + colDiff
 }
 
-func CountNumsWithinRange(nums []int, start, end int) (count int) {
-	for _, num := range nums {
-		if num >= end {
-			return
-		}
-
-		if num > start && num < end {
-			count++
-		}
+func abs(a int) int {
+	if a < 0 {
+		return -a
 	}
 
-	return
+	return a
 }
