@@ -17,13 +17,13 @@ func Part1() (answer int, elapsed time.Duration) {
 	var now = time.Now()
 	var universe = bytes.Split(input, []byte{'\n'})
 
-	ExpandUniverse(universe)
+	var emptyRows, emptyCols = ExpandUniverse(universe)
 	var galaxies = FindGalaxies(universe)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += CountStepsBetween(universe, galaxies[i], galaxies[j], 2)
+			steps += CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 2)
 		}
 	}
 
@@ -36,13 +36,13 @@ func Part2() (answer int, elapsed time.Duration) {
 
 	var universe = bytes.Split(input, []byte{'\n'})
 
-	ExpandUniverse(universe)
+	var emptyRows, emptyCols = ExpandUniverse(universe)
 	var galaxies = FindGalaxies(universe)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += CountStepsBetween(universe, galaxies[i], galaxies[j], 1_000_000)
+			steps += CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 1_000_000)
 		}
 	}
 
@@ -63,22 +63,20 @@ type Galaxy struct {
 	Col int
 }
 
-func ExpandUniverse(universe Universe) {
-	for _, row := range universe {
+func ExpandUniverse(universe Universe) (emptyRows []int, emptyCols []int) {
+	for i, row := range universe {
 		if isEmptySpace(row) {
-			for col := 0; col < len(row); col++ {
-				row[col] = PENALTY
-			}
+			emptyRows = append(emptyRows, i)
 		}
 	}
 
 	for col := 0; col < len(universe[0]); col++ {
 		if isEmptySpaceCol(universe, col) {
-			for row := 0; row < len(universe); row++ {
-				universe[row][col] = PENALTY
-			}
+			emptyCols = append(emptyCols, col)
 		}
 	}
+
+	return
 }
 
 func isEmptySpace(imageArea []byte) bool {
@@ -107,7 +105,7 @@ func FindGalaxies(universe Universe) (galaxies []Galaxy) {
 	return
 }
 
-func CountStepsBetween(universe Universe, first, second Galaxy, penaltyMultiplier int) (steps int) {
+func CountStepsBetween(universe Universe, first, second Galaxy, emptyRows, emptyCols []int, penaltyMultiplier int) (steps int) {
 	var rowStart = first.Row
 	var rowEnd = second.Row
 	if rowStart > rowEnd {
@@ -120,20 +118,27 @@ func CountStepsBetween(universe Universe, first, second Galaxy, penaltyMultiplie
 		colStart, colEnd = colEnd, colStart
 	}
 
-	for row := rowStart; row < rowEnd; row++ {
-		if universe[row][0] == PENALTY {
-			steps += penaltyMultiplier
-		} else {
-			steps++
-		}
-	}
+	// Count number of emptry rows between startRow and endRow
+	var numEmptyRows = CountNumsWithinRange(emptyRows, rowStart, rowEnd)
+	var rowDistance = (rowEnd - rowStart) - numEmptyRows + (numEmptyRows * penaltyMultiplier)
 
-	for col := colStart; col < colEnd; col++ {
-		var row = universe[0]
-		if row[col] == PENALTY {
-			steps += penaltyMultiplier
-		} else {
-			steps++
+	// Count number of emptry cols between startCol and endCol
+	var numEmptyCols = CountNumsWithinRange(emptyCols, colStart, colEnd)
+	var colDistance = (colEnd - colStart) - numEmptyCols + (numEmptyCols * penaltyMultiplier)
+
+	steps = rowDistance + colDistance
+
+	return steps
+}
+
+func CountNumsWithinRange(nums []int, start, end int) (count int) {
+	for _, num := range nums {
+		if num >= end {
+			return
+		}
+
+		if num > start && num < end {
+			count++
 		}
 	}
 

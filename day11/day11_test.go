@@ -21,18 +21,27 @@ func TestExpandUniverse(t *testing.T) {
 		[]byte("#...#....."),
 	}
 
-	day11.ExpandUniverse(universe)
-	assert.Equal(t, 10, len(universe))
-	assert.Equal(t, []byte("..!#.!..!."), universe[0])
-	assert.Equal(t, []byte("..!..!.#!."), universe[1])
-	assert.Equal(t, []byte("#.!..!..!."), universe[2])
-	assert.Equal(t, []byte("!!!!!!!!!!"), universe[3])
-	assert.Equal(t, []byte("..!..!#.!."), universe[4])
-	assert.Equal(t, []byte(".#!..!..!."), universe[5])
-	assert.Equal(t, []byte("..!..!..!#"), universe[6])
-	assert.Equal(t, []byte("!!!!!!!!!!"), universe[7])
-	assert.Equal(t, []byte("..!..!.#!."), universe[8])
-	assert.Equal(t, []byte("#.!.#!..!."), universe[9])
+	var emptyRows, emptyCols = day11.ExpandUniverse(universe)
+	assert.Equal(t, 2, len(emptyRows))
+	assert.Equal(t, 3, emptyRows[0])
+	assert.Equal(t, 7, emptyRows[1])
+
+	assert.Equal(t, 3, len(emptyCols))
+	assert.Equal(t, 2, emptyCols[0])
+	assert.Equal(t, 5, emptyCols[1])
+	assert.Equal(t, 8, emptyCols[2])
+
+	// assert.Equal(t, 10, len(universe))
+	// assert.Equal(t, []byte("..!#.!..!."), universe[0])
+	// assert.Equal(t, []byte("..!..!.#!."), universe[1])
+	// assert.Equal(t, []byte("#.!..!..!."), universe[2])
+	// assert.Equal(t, []byte("!!!!!!!!!!"), universe[3])
+	// assert.Equal(t, []byte("..!..!#.!."), universe[4])
+	// assert.Equal(t, []byte(".#!..!..!."), universe[5])
+	// assert.Equal(t, []byte("..!..!..!#"), universe[6])
+	// assert.Equal(t, []byte("!!!!!!!!!!"), universe[7])
+	// assert.Equal(t, []byte("..!..!.#!."), universe[8])
+	// assert.Equal(t, []byte("#.!.#!..!."), universe[9])
 }
 
 func TestFindGalaxies(t *testing.T) {
@@ -71,46 +80,48 @@ func TestFindGalaxies(t *testing.T) {
 
 func TestCountStepsBetween(t *testing.T) {
 	var universe = [][]byte{
-		[]byte("..!#.!..!."),
-		[]byte("..!..!.#!."),
-		[]byte("#.!..!..!."),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!#.!."),
-		[]byte(".#!..!..!."),
-		[]byte("..!..!..!#"),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!.#!."),
-		[]byte("#.!.#!..!."),
+		[]byte("...#......"),
+		[]byte(".......#.."),
+		[]byte("#........."),
+		[]byte(".........."),
+		[]byte("......#..."),
+		[]byte(".#........"),
+		[]byte(".........#"),
+		[]byte(".........."),
+		[]byte(".......#.."),
+		[]byte("#...#....."),
 	}
 
+	var emptyRows, emptyCols = day11.ExpandUniverse(universe)
 	var galaxies = day11.FindGalaxies(universe)
 
-	assert.Equal(t, 9, day11.CountStepsBetween(universe, galaxies[4], galaxies[8], 2))
-	assert.Equal(t, 15, day11.CountStepsBetween(universe, galaxies[0], galaxies[6], 2))
-	assert.Equal(t, 17, day11.CountStepsBetween(universe, galaxies[2], galaxies[5], 2))
-	assert.Equal(t, 5, day11.CountStepsBetween(universe, galaxies[7], galaxies[8], 2))
+	assert.Equal(t, 9, day11.CountStepsBetween(universe, galaxies[4], galaxies[8], emptyRows, emptyCols, 2))
+	assert.Equal(t, 15, day11.CountStepsBetween(universe, galaxies[0], galaxies[6], emptyRows, emptyCols, 2))
+	assert.Equal(t, 17, day11.CountStepsBetween(universe, galaxies[2], galaxies[5], emptyRows, emptyCols, 2))
+	assert.Equal(t, 5, day11.CountStepsBetween(universe, galaxies[7], galaxies[8], emptyRows, emptyCols, 2))
 }
 
 func TestCountStepsBetweenAllPairs_2x(t *testing.T) {
 	var universe = [][]byte{
-		[]byte("..!#.!..!."),
-		[]byte("..!..!.#!."),
-		[]byte("#.!..!..!."),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!#.!."),
-		[]byte(".#!..!..!."),
-		[]byte("..!..!..!#"),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!.#!."),
-		[]byte("#.!.#!..!."),
+		[]byte("...#......"),
+		[]byte(".......#.."),
+		[]byte("#........."),
+		[]byte(".........."),
+		[]byte("......#..."),
+		[]byte(".#........"),
+		[]byte(".........#"),
+		[]byte(".........."),
+		[]byte(".......#.."),
+		[]byte("#...#....."),
 	}
 
+	var emptyRows, emptyCols = day11.ExpandUniverse(universe)
 	var galaxies = day11.FindGalaxies(universe)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += day11.CountStepsBetween(universe, galaxies[i], galaxies[j], 2)
+			steps += day11.CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 2)
 		}
 	}
 
@@ -119,24 +130,25 @@ func TestCountStepsBetweenAllPairs_2x(t *testing.T) {
 
 func TestCountStepsBetweenAllPairs_10x(t *testing.T) {
 	var universe = [][]byte{
-		[]byte("..!#.!..!."),
-		[]byte("..!..!.#!."),
-		[]byte("#.!..!..!."),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!#.!."),
-		[]byte(".#!..!..!."),
-		[]byte("..!..!..!#"),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!.#!."),
-		[]byte("#.!.#!..!."),
+		[]byte("...#......"),
+		[]byte(".......#.."),
+		[]byte("#........."),
+		[]byte(".........."),
+		[]byte("......#..."),
+		[]byte(".#........"),
+		[]byte(".........#"),
+		[]byte(".........."),
+		[]byte(".......#.."),
+		[]byte("#...#....."),
 	}
 
+	var emptyRows, emptyCols = day11.ExpandUniverse(universe)
 	var galaxies = day11.FindGalaxies(universe)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += day11.CountStepsBetween(universe, galaxies[i], galaxies[j], 10)
+			steps += day11.CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 10)
 		}
 	}
 
@@ -145,24 +157,25 @@ func TestCountStepsBetweenAllPairs_10x(t *testing.T) {
 
 func TestCountStepsBetweenAllPairs_100x(t *testing.T) {
 	var universe = [][]byte{
-		[]byte("..!#.!..!."),
-		[]byte("..!..!.#!."),
-		[]byte("#.!..!..!."),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!#.!."),
-		[]byte(".#!..!..!."),
-		[]byte("..!..!..!#"),
-		[]byte("!!!!!!!!!!"),
-		[]byte("..!..!.#!."),
-		[]byte("#.!.#!..!."),
+		[]byte("...#......"),
+		[]byte(".......#.."),
+		[]byte("#........."),
+		[]byte(".........."),
+		[]byte("......#..."),
+		[]byte(".#........"),
+		[]byte(".........#"),
+		[]byte(".........."),
+		[]byte(".......#.."),
+		[]byte("#...#....."),
 	}
 
+	var emptyRows, emptyCols = day11.ExpandUniverse(universe)
 	var galaxies = day11.FindGalaxies(universe)
 
 	var steps = 0
 	for i := 0; i < len(galaxies); i++ {
 		for j := i + 1; j < len(galaxies); j++ {
-			steps += day11.CountStepsBetween(universe, galaxies[i], galaxies[j], 100)
+			steps += day11.CountStepsBetween(universe, galaxies[i], galaxies[j], emptyRows, emptyCols, 100)
 		}
 	}
 
